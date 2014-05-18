@@ -24,28 +24,30 @@ First, create a mustache template file that uses the hash output. The template c
 
 Then, modify your .csproj files to reference the NorthHorizon.Build.Tasks assembly and invoke the HashFiles task with the appropriate parameters.
 
-    <?xml version="1.0" encoding="utf-8"?>
-    <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-        <!-- Import the task assembly -->
-        <UsingTask 
-            AssemblyFile="..\packages\NorthHorizon.Build-1.0.0.0\lib\net-40\NorthHorizon.Build.Tasks.dll"
-            TaskName="NorthHorizon.Build.Tasks.HashFiles" />
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!-- Import the task assembly -->
+    <UsingTask 
+        AssemblyFile="..\packages\NorthHorizon.Build-1.0.0.0\lib\net-40\NorthHorizon.Build.Tasks.dll"
+        TaskName="NorthHorizon.Build.Tasks.HashFiles" />
 
-        <!-- ... -->
+    <!-- ... -->
 
-        <!-- Invoke the HashFiles task in the BeforeBuild target
-             so we can add some information to the assembly -->
-        <Target Name="BeforeBuild">
-            <!-- Identify your mustache template to be used, the list of files 
-                to be hashed, and the output location for the rendered template. -->
-            <HashFiles 
-                TemplatePath="SourceHashes.cs.mustache" 
-                FilePaths="@(Compile)"
-                OutPath="$(IntermediateOutputPath)\SourceHashes.cs" />
+    <!-- Invoke the HashFiles task in the BeforeBuild target
+         so we can add some information to the assembly -->
+    <Target Name="BeforeBuild">
+        <!-- Identify your mustache template to be used, the list of files 
+            to be hashed, and the output location for the rendered template. -->
+        <HashFiles 
+            TemplatePath="SourceHashes.cs.mustache" 
+            FilePaths="@(Compile)"
+            OutPath="$(IntermediateOutputPath)\SourceHashes.cs" />
 
-            <!-- Add the output file to the build -->
-            <ItemGroup>
-                <Compile Include="$(IntermediateOutputPath)\SourceHashes.cs" />
-            </ItemGroup>
-        </Target>
-    </Project>
+        <!-- Add the output file to the build -->
+        <ItemGroup>
+            <Compile Include="$(IntermediateOutputPath)\SourceHashes.cs" />
+        </ItemGroup>
+    </Target>
+</Project>
+```
